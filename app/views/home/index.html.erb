@@ -1,0 +1,55 @@
+<div clas="container mt-5">
+    <form action="/create_post", method="get">
+      <div class="form-group">
+    <textarea class="form-control"rows="5" placeholder="Input your message" name="content"></textarea>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+      </form>
+</div>
+
+<div class="container">
+    <% @posts.each do |p| %>
+     <h3><%= p.writer%></h3>
+     <h1><%= p.content%></h1>
+     
+     
+    <div class="row">
+        <% if current_user.name == p.writer %> 
+
+        <form action="/edit/<%=p.id%>", method="get"> 
+            <button type="submit" class="btn btn-primary">Edit</button>
+        </form>
+        <form action="/delete/<%=p.id%>", method="get"> 
+            <button type="submit" class="btn btn-primary">Delete</button>
+        </form>            
+        <% else %>
+        
+        <% end %>
+        
+        <form action="/like/<%=p.id%>", method="get">
+            <button type="submit" class="btn btn-primary">
+                
+        <% if current_user.is_like?(p) %>
+         unlike <%= p.likes.size %>
+        <% else %>
+         Like <%= p.likes.size %>
+        <% end %>
+        
+            </button>    
+         </form>           
+ 
+    </div>
+    
+    <% p.comments.each do |c| %>
+        
+        <h1><%=c.writer%> - <%= c.content%></h1>
+    <% end %>
+        <form action="/create_comment/<%=p.id%>", method="get" class="row"> 
+            <input type="text" class="form-control col-10" name="content">
+            <button type="submit" class="btn btn-danger col-md-2">Comment</button>
+        </form>
+             
+    <% end %>
+    
+
+</div>
